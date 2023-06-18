@@ -101,7 +101,7 @@
         },
         "seeding": {
           "selector": [ "#data-now-seed" ],
-          "filters": [ "query.text().replace(/当前上传[：:]/,'')" ]
+          "filters": [ "query.text().replace(/当前做种[：:]/,'')" ]
         }
       }
     },
@@ -118,24 +118,29 @@
           "selector": [ "a[href*='/Users/profile'][class*='User']" ],
           "filters": [ "query.attr('class').replace(/[^ ]*\\s/,'').replace(/User.*/,'').toUpperCase()"]
         },
-        "bonus": {
-          "selector": [ "#data-seedGH" ],
-          "filters": [ "query.text()" ]
+       
+        "seedingSize": {
+          "selector": [ "th:contains('当前做种种子') + td"],
+          "filters": [
+            "query.text().replace(/,/g,'').replace('个种子','').match(/([\\d.]+ ?[ZEPTGMK]?i?B)/)", "(query && query.length>=2)?(query[1]).sizeToNumber():0"
+          ]
         }
       }
     },
-      "userSeedingTorrents": {
-        "page": "/Torrents/mySeed",
-        "fields": {
-          "seedingSize": {
-            "selector": ".panel-primary .panel-body td(6)",
-            "filters": [
-              "(query != 0) ? query.sizeToNumber() : 0",
-              "query.text()"
-            ]
-          }
+    "bonusExtendInfo": {
+      "page": "/Achievements",
+      "fields": {
+        "bonus": {
+          "selector": ["#data-points"],
+          "filters": ["query.text().replace(/,/g,'').replace('魔力：','')"]
+        },
+        "seedingPoints": {
+          "selector": [".adminUser:last"],
+          "filters": ["query.text()"]
         }
-      },
+      }
+    },
+
     "common": {
       "page": "/Torrents",
       "fields": {
